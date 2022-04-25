@@ -1,0 +1,30 @@
+
+name: TRANSACTION MICROSERVICE BUILD AND TEST
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-AND-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore ./cashmanager.api.tranasctions
+      
+    - name: Build
+      run: dotnet build --configuration Development --no-restore ./cashmanager.api.tranasctions
+      
+    - name: Test
+      run: dotnet test --no-build ./cashmanager.api.tranasctions.tests --verbosity normal --logger trx
