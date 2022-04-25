@@ -21,10 +21,10 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
     - name: Restore dependencies
-      run: dotnet restore ./cashmanager.api.tranasctions
+      run: dotnet restore ./cashmanager.api.transactions
       
     - name: Build
-      run: dotnet build --configuration Development --no-restore ./cashmanager.api.tranasctions
+      run: dotnet build --configuration Development --no-restore ./cashmanager.api.transactions
       
     - name: Test
-      run: dotnet test --no-build ./cashmanager.api.tranasctions.tests --verbosity normal --logger trx
+      run: dotnet test --no-build ./cashmanager.api.transactions.tests --verbosity normal --logger trx
