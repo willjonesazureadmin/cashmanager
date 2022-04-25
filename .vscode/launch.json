@@ -1,0 +1,63 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": ".NET Core Launch Accounts API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-accounts",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/cashmanager.api.accounts/bin/Debug/net6.0/cashmanager.api.accounts.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/cashmanager.api.accounts",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:4001/"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": ".NET Core Launch Transactions API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-transactions",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/cashmanager.api.transactions/bin/Debug/net6.0/cashmanager.api.transactions.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/cashmanager.api.transactions",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:4000/"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        }       
+    ],
+    "compounds": [
+        {
+            "name": "Launch APIs",
+            "configurations": [".NET Core Launch Accounts API", ".NET Core Launch Transactions API"]
+        }
+    ]
+}
