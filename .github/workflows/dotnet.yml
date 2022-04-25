@@ -22,4 +22,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./cashmanager.api.accounts
     - name: Test
-      run: dotnet test --no-build ./cashmanager.api.accounts --verbosity normal --logger trx
+      run: dotnet test --no-build ./cashmanager.api.accounts.tests --verbosity normal --logger trx
