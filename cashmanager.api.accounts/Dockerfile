@@ -11,7 +11,7 @@ USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
-COPY ["cashmanager.api.accounts/cashmanager.api.accounts.csproj", "cashmanager.api.accounts/"]
+COPY ["cashmanager.api.accounts/cashmanager.api.accounts.csproj", "./cashmanager.api.accounts/"]
 RUN dotnet restore "cashmanager.api.accounts/cashmanager.api.accounts.csproj"
 COPY . .
 WORKDIR "/src/cashmanager.api.accounts"
