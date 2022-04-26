@@ -30,7 +30,7 @@ jobs:
       run: dotnet test --no-build ./cashmanager.api.transactions.tests --verbosity normal --logger trx
       
     - name: Publish
-      run: dotnet publish ./cashmanager.api.transactions -o /publish/accounts
+      run: dotnet publish ./cashmanager.api.transactions -o ./publish/accounts
     
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
