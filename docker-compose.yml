@@ -1,0 +1,19 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  cashmanagerapiaccounts:
+    image: cashmanagerapiaccounts
+    build:
+      context: .
+      dockerfile: cashmanager.api.accounts/Dockerfile
+    ports:
+      - 4001:4001
+  cashmanagerapitransactions:
+      image: cashmanagerapitransactions
+      build:
+        context: .
+        dockerfile: cashmanager.api.transactions/Dockerfile
+      ports:
+        - 4000:4000

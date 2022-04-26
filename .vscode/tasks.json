@@ -72,6 +72,162 @@
                 "${workspaceFolder}/cashmanager.api.transactions/cashmanager.api.transactions.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/cashmanager.api.accounts/cashmanager.api.accounts.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/cashmanager.api.accounts/cashmanager.api.accounts.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project",
+                "${workspaceFolder}/cashmanager.api.accounts/cashmanager.api.accounts.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "docker-build",
+            "label": "accounts docker-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "cashmanageraccounts:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/cashmanager.api.accounts/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/cashmanager.api.accounts/cashmanager.api.accounts.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "accounts docker-build: release",
+            "dependsOn": [
+                "build"
+            ],            
+            "dockerBuild": {
+                "tag": "cashmanageraccounts:latest",
+                "dockerfile": "${workspaceFolder}/cashmanager.api.accounts/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/cashmanager.api.accounts/cashmanager.api.accounts.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "accounts docker-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {
+                "containerName": "cashmanageraccounts-debug"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/cashmanager.api.accounts/cashmanager.api.accounts.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "accounts docker-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {
+                "containerName": "cashmanageraccounts-release"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/cashmanager.api.accounts/cashmanager.api.accounts.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "transactions docker-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "cashmanagertransactions:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/cashmanager.api.transactions/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/cashmanager.api.transactions/cashmanager.api.transactions.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "transactions docker-build: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "cashmanagertransactions:latest",
+                "dockerfile": "${workspaceFolder}/cashmanager.api.transactions/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/cashmanager.api.transactions/cashmanager.api.transactions.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "transactions docker-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {
+                "containerName": "cashmanagertransactions-debug"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/cashmanager.api.transactions/cashmanager.api.transactions.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "transactions docker-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {
+                "containerName": "cashmanagertransactions-release"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/cashmanager.api.transactions/cashmanager.api.transactions.csproj"
+            }
         }
     ]
 }
