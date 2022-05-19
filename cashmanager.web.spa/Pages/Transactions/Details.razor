@@ -1,0 +1,12 @@
+@page "/transactions/{id}"
+
+<AppHeader pageName="Transaction Details"/>
+<EditTransaction id=@id></EditTransaction>
+
+
+
+@code {
+    [Parameter]
+    public String id {get; set;} = "";
+
+}

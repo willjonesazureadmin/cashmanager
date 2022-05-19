@@ -146,10 +146,11 @@
             "type": "docker-run",
             "label": "accounts docker-run: debug",
             "dependsOn": [
-                "docker-build: debug"
+                "accounts docker-build: debug"
             ],
             "dockerRun": {
-                "containerName": "cashmanageraccounts-debug"
+                "containerName": "cashmanageraccounts-debug",
+                "portsPublishAll": true
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/cashmanager.api.accounts/cashmanager.api.accounts.csproj",
@@ -206,7 +207,7 @@
             "type": "docker-run",
             "label": "transactions docker-run: debug",
             "dependsOn": [
-                "docker-build: debug"
+                "transactions docker-build: debug"
             ],
             "dockerRun": {
                 "containerName": "cashmanagertransactions-debug"
@@ -228,6 +229,43 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/cashmanager.api.transactions/cashmanager.api.transactions.csproj"
             }
+        },
+        {
+            "label" : "build SPA",
+            "command" : "dotnet",
+            "type": "process",
+            "args" : [
+                "build",
+                "${workspaceFolder}/cashmanager.spa.web/cashmanager.spa.web.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish SPA",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/cashmanager.spa.web/cashmanager.spa.web.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch SPA",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/cashmanager.spa.web/cashmanager.spa.web.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }

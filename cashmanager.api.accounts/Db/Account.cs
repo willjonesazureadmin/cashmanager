@@ -12,5 +12,11 @@ namespace cashmanager.api.accounts.Db
 
         public string? FriendlyName { get; set; }   
 
+        public string? Provider { get; set; }
+
+        public string? AccountNumber { get; set; }
+
+        public string? SortCode { get; set; }
+
     }
 }

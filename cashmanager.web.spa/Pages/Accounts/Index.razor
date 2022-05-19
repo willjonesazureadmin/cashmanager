@@ -1,0 +1,141 @@
+@page "/accounts"
+@using Models
+@inject cashmanager.web.spa.Services.IAccountService _accountService;
+@inject cashmanager.web.spa.Services.ITransactionService _transactionService;
+
+<AppHeader pageName="Accounts" />
+
+
+@if (Loading)
+{
+    <Loading></Loading>
+}
+else
+{
+    <TableAcount accounts=accounts CallbackRestoreAllChildren="HandlerRestoreAllChildren"></TableAcount>
+    @if (AddAccount)
+    {
+        <AddAccount Hide="HandlerAddAccount"></AddAccount>
+    }
+    else if (!AddTransaction)
+    {
+        <div class="row">
+            <button type="button" class="btn btn-outline-success btn-block" @onclick="() => BtnAddAccount()">
+                Add Account..</button>
+        </div>
+    }
+}
+
+
+
+
+
+
+
+
+
+
+@code {
+
+    private List<GetAccountModel>? accounts;
+
+    private List<GetTransactionModel>? transactions;
+
+    private bool Loading;
+
+
+    private bool AddAccount = false;
+
+    private bool AddTransaction = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await GetAccounts();
+
+        }
+        catch (Exception Ex)
+        {
+
+        }
+        finally
+        {
+            this.Loading = false;
+        }
+    }
+
+    protected async Task GetAccounts()
+    {
+        try
+        {
+            this.Loading = true;
+            accounts = await _accountService.GetAccounts();
+
+        }
+        catch (Exception Ex)
+        {
+
+        }
+        finally
+        {
+            this.Loading = false;
+        }
+    }
+
+
+
+    protected void BtnAddAccount()
+    {
+        try
+        {
+            AddAccount = !AddAccount;
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+    }
+
+    private void HandlerAddAccount()
+    {
+        try
+        {
+            this.AddAccount = false;
+        }
+        catch (Exception ex)
+        {
+
+        }
+        finally
+        {
+
+        }
+
+    }
+    private async Task HandlerRestoreAllChildren()
+    {
+        try
+        {
+            Console.WriteLine("Callback success - Restoring all children with fresh query");
+            await GetAccounts();
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+
+    }
+
+
+
+
+}

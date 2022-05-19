@@ -1,0 +1,108 @@
+@using cashmanager.web.spa.Models;
+@inject cashmanager.web.spa.Services.IAccountService _accountService;
+@if (Loading)
+{
+    <Loading />
+}
+else
+{
+    <EditForm class="form" Model=@model OnValidSubmit=@FormSubmitted>
+        <DataAnnotationsValidator />
+        <ValidationMessage For=@(() => model) />
+        <div class="row">
+            <div class="col">
+                <label>
+                    Friendly Name:
+                </label>
+                <InputText @bind-Value=model.FriendlyName class="form-control" placeholder="Friendly Name" />
+            </div>
+            <div class="col">
+                <label>
+                    Opening Balance:
+                </label>
+                <InputNumber @bind-Value=model.Balance class="form-control" placeholder="Balance"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>
+                    Provider:
+                </label>
+                <InputText @bind-Value=model.Provider class="form-control" placeholder="Provider" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>
+                    Account Number:
+                </label>
+                <InputText @bind-Value=model.AccountNumber class="form-control" placeholder="Account No."/>
+            </div>
+            <div class="col">
+                <label>
+                    Sort Code:
+                </label>
+                <InputText @bind-Value=model.SortCode class="form-control" placeholder="Sort Code"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button type="submit" class="btn btn-success" value="Save">Save</button>
+                <button type="button" class="btn btn-outline-warning" @onclick="() => BtnClose()">Close</button>
+            </div>
+        </div>
+    </EditForm>
+}
+
+
+@code {
+
+    public AddAccountModel model = new();
+
+    [Parameter]
+    public EventCallback Hide { get; set; }
+
+
+    private bool Loading;
+
+
+    protected override async void OnInitialized()
+    {
+
+    }
+
+    async Task FormSubmitted(EditContext editContext)
+    {
+        try
+        {
+            bool formIsValid = editContext.Validate();
+            if (formIsValid && editContext.IsModified())
+            {
+                Loading = true;
+                await _accountService.AddAccount(model);
+                Loading = false;
+                Hide.InvokeAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+    }
+
+    protected void BtnClose()
+    {
+        try
+        {
+            Hide.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+    }
+}

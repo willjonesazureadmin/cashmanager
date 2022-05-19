@@ -1,0 +1,127 @@
+@using cashmanager.web.spa.Models;
+@inject cashmanager.web.spa.Services.ITransactionService _transactionService;
+
+
+<Error error=error />
+
+@if (model != null)
+{
+    <text>Transaction details for <b> @model.TransactionFriendlyName </b> </text>
+    <EditForm Model=@model OnValidSubmit=@FormSubmitted>
+        <DataAnnotationsValidator />
+        <ValidationMessage For=@(() => model) />
+        <div class="row">
+            <div class="col">
+                <label>
+                    Friendly Name:
+                </label>
+                <InputText @bind-Value=model.TransactionFriendlyName class="form-control" readonly=@boolReadonly />
+            </div>
+            <div class="col">
+                <label>
+                    Amount:
+                </label>
+                <InputNumber @bind-Value=model.Amount class="form-control" readonly=true />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                 <label>
+                    Type:
+                </label>
+                <InputSelect @bind-Value=model.TransactionType class="form-control" readonly=true>
+                @foreach (var a in Enum.GetValues(typeof(TransactionType)))
+                {
+                    <option value="@a">@a</option>
+                }
+                </InputSelect>
+            </div>
+            <div class="col">
+                <label>
+                    State:
+                </label>
+                <InputSelect @bind-Value=model.TransactionState class="form-control" readonly=true>
+                @foreach (var a in Enum.GetValues(typeof(TransactionState)))
+                {
+                    <option value="@a">@a</option>
+                }
+                </InputSelect>
+            </div> 
+         </div> 
+        @if (!boolReadonly)
+        {
+            <button type="submit" class="btn btn-primary" value="Save">Save</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-outline-primary" @onclick="() => BtnEdit()">Edit..</button>
+        }
+        <a class="btn btn-warning" href="/transactions">Close</a>
+    </EditForm>
+}
+else
+{
+    <Loading />
+}
+
+
+@code {
+
+    [Parameter]
+    public string? id { get; set; }
+
+    [Parameter]
+    public bool boolReadonly { get; set; } = true;
+
+    public GetTransactionModel? model { get; set; }
+
+    private bool error;
+
+    protected override async void OnInitialized()
+    {
+        try
+        {
+            model = await _transactionService.GetTransaction(Guid.Parse(id));
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            error = true;
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task FormSubmitted(EditContext editContext)
+    {
+        try
+        {
+            if (editContext.Validate() && editContext.IsModified())
+            {
+                @* await _transactionService.UpdateTransaction(model); *@
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+    }
+
+
+    protected void BtnEdit()
+    {
+        try
+        {
+            this.boolReadonly = false;
+            this.StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+    }
+
+}

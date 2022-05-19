@@ -1,0 +1,27 @@
+@using cashmanager.web.spa.Models;
+@inject cashmanager.web.spa.Services.IAccountService _accountService;
+
+<tr>
+    <td>@model.TransactionDateTime</td>
+    <td>£@model.Amount</td>
+    <td>@model.TransactionFriendlyName</td>
+    <td>@model.TransactionState</td>
+    <td>
+        <a class="btn btn-success" href="/transactions/@model.Id">Details</a>
+        @if(!boolHideAccountButton)
+        {
+        <a class="btn btn-success" href="/accounts/@model.AccountId">Account</a>
+        }
+
+    </td>
+</tr>
+
+@code {
+
+    [Parameter]
+    public GetTransactionModel model { get; set; } = new GetTransactionModel();
+
+    [Parameter]
+    public bool boolHideAccountButton { get; set; } = false;
+
+}

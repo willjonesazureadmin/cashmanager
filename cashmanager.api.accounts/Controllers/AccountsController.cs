@@ -1,5 +1,6 @@
 using System;
 using cashmanager.api.accounts.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace cashmanager.api.accounts.Controllers
@@ -17,6 +18,7 @@ namespace cashmanager.api.accounts.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetAccounts()
         {
             try
@@ -37,7 +39,7 @@ namespace cashmanager.api.accounts.Controllers
 
         }
 
-        [HttpPut]
+        [HttpPost]
         public IActionResult AddAccount(Models.AddAccountModel model)
         {
             try
@@ -68,6 +70,38 @@ namespace cashmanager.api.accounts.Controllers
 
         }
 
+        [HttpPut]
+        public IActionResult UpdateAccount(Models.UpdateAccountModel model)
+        {
+            try
+            {
+                logger.LogInformation("Add new account");
+                if (ModelState.IsValid)
+                {
+                    var result = accountsProvider.UpdateAccount(model);
+                    if (result.IsSuccess)
+                    {
+                        return Ok(result.account);
+                    }
+                    else
+                    {
+                        return BadRequest(result.ErrorMessage);
+                    }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [Authorize]
         [HttpGet("{Guid}")]
         public IActionResult GetAccount(string Guid)
         {

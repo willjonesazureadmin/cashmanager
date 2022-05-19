@@ -1,0 +1,112 @@
+@using cashmanager.web.spa.Models;
+@inject cashmanager.web.spa.Services.IAccountService _accountService;
+
+
+<Error error=error />
+
+@if (model != null)
+{
+    <text>Account details for <b> @model.FriendlyName </b> </text>
+    <EditForm Model=@model OnValidSubmit=@FormSubmitted>
+        <DataAnnotationsValidator />
+        <ValidationMessage For=@(() => model.AccountNumber) />
+        <div class="form-group">
+            <label>
+                Friendly Name:
+                <InputText @bind-Value=model.FriendlyName class="form-control" readonly=@boolReadonly/>
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Provider:
+                <InputText @bind-Value=model.Provider class="form-control" readonly=@boolReadonly/>
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Account Number:
+                <InputText @bind-Value=model.AccountNumber class="form-control" readonly=@boolReadonly/>
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Sort Code:
+                <InputText @bind-Value=model.SortCode class="form-control" readonly=@boolReadonly />
+            </label>
+        </div>
+        @if(!boolReadonly)
+        {
+            <button type="submit" class="btn btn-primary" value="Save">Save</button>
+        }
+        else{
+              <button type="button" class="btn btn-outline-primary" @onclick="() => BtnEdit()">Edit..</button>      
+        }
+        <a class="btn btn-warning" href="/accounts">Close</a>       
+    </EditForm>
+}
+else
+{
+    <Loading />
+}
+
+
+@code {
+
+    [Parameter]
+    public string? id { get; set; }
+
+    [Parameter]
+    public bool boolReadonly {get; set; }= true;
+
+    public UpdateAccountModel? model { get; set; }
+
+    private bool error;
+
+    protected override async void OnInitialized()
+    {
+        try
+        {
+            model = new UpdateAccountModel(await _accountService.GetAccount(Guid.Parse(id)));
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            error = true;
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task FormSubmitted(EditContext editContext)
+    {
+        try
+        {
+            if (editContext.Validate() && editContext.IsModified())
+            {
+                await _accountService.UpdateAccount(model);
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+    }
+
+
+        protected void BtnEdit()
+    {
+        try
+        {
+            this.boolReadonly = false;
+            this.StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+    }
+
+}

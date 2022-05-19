@@ -23,15 +23,28 @@ namespace cashmanager.api.transactions.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTransactions()
+        public IActionResult GetTransactions([FromQuery] string? accountId = "")
         {
             try
             {
-                var result = transactionsProvider.GetTransactions();
-                if (result.IsSuccess)
+                if (accountId != "")                
                 {
-                    return Ok(result.transactions);
+                    Console.WriteLine("Getting by Id");
+                    var result = transactionsProvider.GetTransactionsByAccountId(Guid.Parse(accountId));
+                    if (result.IsSuccess)
+                    {
+                        return Ok(result.transactions);
+                    }
                 }
+                else
+                {
+                    var result = transactionsProvider.GetTransactions();
+                    if (result.IsSuccess)
+                    {
+                        return Ok(result.transactions);
+                    }
+                }
+
                 return NotFound();
             }
             catch (System.FormatException)
@@ -44,6 +57,32 @@ namespace cashmanager.api.transactions.Controllers
             }
 
         }
+
+        // [HttpGet]
+        // public IActionResult GetTransactions()
+        // {
+        //     try
+        //     {
+
+        //         var result = transactionsProvider.GetTransactions();
+        //         if (result.IsSuccess)
+        //         {
+        //             return Ok(result.transactions);
+        //         }
+
+
+        //         return NotFound();
+        //     }
+        //     catch (System.FormatException)
+        //     {
+        //         return NotFound();
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return BadRequest(ex.Message);
+        //     }
+
+        // }
 
         [HttpPut]
         [HttpPost]

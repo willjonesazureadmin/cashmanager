@@ -1,0 +1,17 @@
+@page "/accounts/{id}/transactions"
+@using Models
+
+@inject cashmanager.web.spa.Services.IAccountService _accountService;
+@inject cashmanager.web.spa.Services.ITransactionService _transactionService;
+
+
+<AppHeader pageName="Account Transactions"/>
+<EditAccount id=@id></EditAccount>
+
+
+
+@code {
+    [Parameter]
+    public String id {get; set;} = "";
+
+}

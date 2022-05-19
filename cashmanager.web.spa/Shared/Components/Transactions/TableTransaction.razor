@@ -1,0 +1,37 @@
+@using Models
+@inject cashmanager.web.spa.Services.ITransactionService _transactionService;
+
+<table class="table table-striped">
+    <thead class="thead-light">
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Reference</th>
+            <th>State</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in model)
+        {
+            <TableRowTransaction model=a boolHideAccountButton=boolHideAccountButton></TableRowTransaction>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+
+
+@code {
+
+    [Parameter]
+    public List<GetTransactionModel>? model { get; set; } = new List<GetTransactionModel>();
+
+    [Parameter]
+    public bool boolHideAccountButton { get; set; } = false;
+
+}

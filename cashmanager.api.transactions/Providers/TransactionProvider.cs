@@ -25,19 +25,41 @@ namespace cashmanager.api.transactions.Providers
 
         private void SeedData()
         {
-            if(!dbContext.Transactions.Any())
+            if (!dbContext.Transactions.Any())
             {
                 logger.LogInformation($"Seeding data to database");
-                dbContext.Transactions.Add(new Db.Transaction() { 
+                dbContext.Transactions.Add(new Db.Transaction()
+                {
                     AccountId = Guid.Parse("e7add886-7d0c-47f0-bb66-8a5759dc15f6"),
                     Amount = 20.00,
                     TransactionFriendlyName = "Seed Transaction",
                     TransactionDateTime = DateTime.Now,
-                    Id = Guid.NewGuid()                   
+                    Id = Guid.NewGuid()
                 });
                 dbContext.SaveChanges();
                 logger.LogInformation($"Seed Complete");
 
+            }
+        }
+
+        public (bool IsSuccess, IEnumerable<Models.GetTransactionModel>? transactions, string? ErrorMessage) GetTransactionsByAccountId(Guid AccountId)
+        {
+            try
+            {
+                logger.LogInformation($"Get All Transactions");
+                var Transactions = dbContext.Transactions.Where(a => a.AccountId == AccountId).ToList();
+                if (Transactions.Any() && Transactions != null)
+                {
+                    var result = mapper.Map<IEnumerable<Db.Transaction>, IEnumerable<Models.GetTransactionModel>>(Transactions);
+                    return (true, result, null);
+                }
+                logger.LogInformation($"No Transaction Found");
+                return (false, null, "Not Found");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
             }
         }
 
@@ -61,6 +83,8 @@ namespace cashmanager.api.transactions.Providers
                 return (false, null, ex.Message);
             }
         }
+
+
         public (bool IsSuccess, Models.GetTransactionModel? transaction, string? ErrorMessage) GetTransaction(Guid Id)
         {
             try
@@ -87,16 +111,16 @@ namespace cashmanager.api.transactions.Providers
             try
             {
                 logger.LogInformation($"Query for Account by {transaction.AccountId}");
-                var accResult = await AccountService.GetAccountAsync(transaction.AccountId);
-                if (accResult.account != null)
-                {
+                // var accResult = await AccountService.GetAccountAsync(transaction.AccountId);
+                // if (accResult.account != null)
+                // {
                     var mappedobject = mapper.Map<Models.AddTransactionModel, Db.Transaction>(transaction);
 
                     var result = dbContext.Add(mappedobject);
                     dbContext.SaveChanges();
                     var mappedobject2 = mapper.Map<Db.Transaction, Models.GetTransactionModel>(result.Entity);
                     var sbresult = await AccountService.UpdateAccountBalanceAsync(mappedobject2);
-                    if(sbresult.IsSuccess)
+                    if (sbresult.IsSuccess)
                     {
                         result.Entity.TransactionState = TransactionState.Pending;
                         dbContext.SaveChanges();
@@ -110,7 +134,7 @@ namespace cashmanager.api.transactions.Providers
                     }
 
 
-                }
+                // }
                 logger.LogInformation($"Account {transaction.AccountId} not found");
                 return (false, null, $"Account {transaction.AccountId} not found");
             }

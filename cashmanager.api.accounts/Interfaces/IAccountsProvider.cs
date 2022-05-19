@@ -9,5 +9,8 @@ namespace cashmanager.api.accounts.Interfaces
         public (bool IsSuccess, GetAccountModel? account, string? ErrorMessage) GetAccount(Guid Id);
         public (bool IsSuccess, GetAccountModel? account, string? ErrorMessage) UpdateBalanceAsync(Guid Id, double amount, CancellationToken cancellationToken);
         public (bool IsSuccess, GetAccountModel? account, string? ErrorMessage) AddAccount(AddAccountModel model);
+
+        public (bool IsSuccess, GetAccountModel? account, string? ErrorMessage) UpdateAccount(UpdateAccountModel model);
+
     }
 }

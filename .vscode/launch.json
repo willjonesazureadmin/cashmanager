@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+    
         {
             "name": ".NET Core Launch Accounts API",
             "type": "coreclr",
@@ -60,6 +61,19 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/cashmanager.api.transactions/cashmanager.api.transactions.csproj"
             }
+        },
+        {
+            "name": ".NET Blazor WASM SPA Launch",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "dotnet",
+            "args": [
+                "run"
+            ],
+            "cwd": "${workspaceFolder}/cashmanager.web.spa",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
         }
     ],
     "compounds": [
@@ -73,6 +87,10 @@
                 "Accounts Docker .NET Core Launch", 
                 "Transactions Docker .NET Core Launch"
             ]
+        },
+        {
+            "name": "Launch All Services",
+            "configurations": [".NET Core Launch Accounts API", ".NET Core Launch Transactions API", ".NET Blazor WASM SPA Launch"]
         }
     ]
 }

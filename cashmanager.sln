@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cashmanager.api.transaction
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cashmanager.api.accounts.tests", "cashmanager.api.accounts.tests\cashmanager.api.accounts.tests.csproj", "{01BB3C65-2157-42A9-8ED7-797C1F72AAE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cashmanager.web.spa", "cashmanager.web.spa\cashmanager.web.spa.csproj", "{990FF661-5544-45B8-B3DF-5850E18C9BA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{01BB3C65-2157-42A9-8ED7-797C1F72AAE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01BB3C65-2157-42A9-8ED7-797C1F72AAE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01BB3C65-2157-42A9-8ED7-797C1F72AAE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{990FF661-5544-45B8-B3DF-5850E18C9BA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{990FF661-5544-45B8-B3DF-5850E18C9BA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{990FF661-5544-45B8-B3DF-5850E18C9BA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{990FF661-5544-45B8-B3DF-5850E18C9BA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

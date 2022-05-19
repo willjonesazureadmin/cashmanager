@@ -1,0 +1,29 @@
+@inject cashmanager.web.spa.Services.IHistoryService _historyService;
+@inject NavigationManager _navigationManager;
+<PageTitle>@pageName</PageTitle>
+@if (_historyService.ShowHistory())
+{
+    <div class="alert alert-secondary mt-4">
+        <span class="text-nowrap">
+            @foreach (var item in _historyService.BreadCrumb().Take(_historyService.BreadCrumb().Count - 1))
+            {
+                <a href="@item.Url">@item.PageName</a>
+                <text> > </text>
+            }
+            <b>@_historyService.BreadCrumb().Last().PageName</b>
+        </span>
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public string pageName { get; set; } = "";
+
+    protected override void OnInitialized()
+    {
+        _historyService.AddPageToHistory(pageName);
+    }
+
+}

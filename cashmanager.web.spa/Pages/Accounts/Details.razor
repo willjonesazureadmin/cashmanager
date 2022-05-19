@@ -1,0 +1,13 @@
+@page "/accounts/{id}"
+@using Models
+
+<AppHeader pageName="Account Details"/>
+<EditAccount id=@id></EditAccount>
+
+
+
+@code {
+    [Parameter]
+    public String id {get; set;} = "";
+
+}

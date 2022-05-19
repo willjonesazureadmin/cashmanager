@@ -1,0 +1,91 @@
+@using cashmanager.web.spa.Models;
+@inject cashmanager.web.spa.Services.IAccountService _accountService;
+
+
+<Error error=error />
+
+@if (model != null)
+{
+    <text>Account details for <b> @model.FriendlyName </b> </text>
+    <EditForm Model=@model >
+        <DataAnnotationsValidator />
+        <ValidationMessage For=@(() => model.AccountNumber) />
+        <div class="form-group">
+            <label>
+                Friendly Name:
+                <InputText @bind-Value=model.FriendlyName class="form-control" readonly=@boolReadonly/>
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Provider:
+                <InputText @bind-Value=model.Provider class="form-control" readonly=@boolReadonly/>
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Account Number:
+                <InputText @bind-Value=model.AccountNumber class="form-control" readonly=@boolReadonly/>
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Sort Code:
+                <InputText @bind-Value=model.SortCode class="form-control" readonly=@boolReadonly />
+            </label>
+        </div>        
+              <a class="button" href="/accounts/@id">More Details</a>      
+        <button type="button" class="btn btn-primary" @onclick="() => BtnClose()">Close</button>
+    </EditForm>
+}
+else
+{
+    <Loading />
+}
+
+
+@code {
+
+    [Parameter]
+    public string? id { get; set; }
+
+    public bool boolReadonly = true;
+
+    [Parameter]
+    public EventCallback Hide { get; set; }
+
+    public UpdateAccountModel? model { get; set; }
+
+    private bool error;
+
+    protected override async void OnInitialized()
+    {
+        try
+        {
+            model = new UpdateAccountModel(await _accountService.GetAccount(Guid.Parse(id)));
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            error = true;
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    protected void BtnClose()
+    {
+        try
+        {
+            Hide.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+    }
+
+
+
+}

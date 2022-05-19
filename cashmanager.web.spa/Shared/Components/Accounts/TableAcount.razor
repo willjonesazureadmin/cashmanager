@@ -1,0 +1,46 @@
+@using cashmanager.web.spa.Models;
+@inject cashmanager.web.spa.Services.IAccountService _accountService;
+@inject cashmanager.web.spa.Services.ITransactionService _transactionService;
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Friendly Name</th>
+            <th>Provider</th>
+            <th>Balance</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in accounts)
+        {
+            <TableRowAccount model=a  CallbackCollapseAllOtherChildren="HandlerCollapseAllOtherChildren" CallbackRestoreAllChildren="HandlerRestoreAllChildren"></TableRowAccount>
+        }
+    </tbody>
+</table>
+
+@code {
+
+    [Parameter]
+    public List<GetAccountModel> accounts { get; set; } = new List<GetAccountModel>();
+    
+    [Parameter]
+    public EventCallback CallbackRestoreAllChildren {get; set;}
+
+    List<TableRowAccount> TableRowAccountComponent = new List<TableRowAccount>();
+
+    private void HandlerRestoreAllChildren()
+    {
+        Console.WriteLine("Restoring All");
+        CallbackRestoreAllChildren.InvokeAsync();
+    }
+    private void HandlerCollapseAllOtherChildren(GetAccountModel model)
+    {
+        Console.WriteLine("Collapsing All");
+        this.accounts.RemoveAll(i => i != model);
+        this.StateHasChanged();
+    }
+
+
+}

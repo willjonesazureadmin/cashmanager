@@ -1,0 +1,205 @@
+@using cashmanager.web.spa.Models;
+@inject cashmanager.web.spa.Services.ITransactionService _transactionService;
+<tr>
+    <td>@model.FriendlyName</td>
+    <td>@model.Provider</td>
+    <td>£@model.Balance.ToString()</td>
+    <td>
+        <button type="button" class="btn btn-outline-success" @onclick="()=>BtnShowDetails()" disabled=@(!boolTransactionCollapsed)>
+            Details..</button>
+        <button type="button" class="btn btn-outline-success" @onclick="()=>BtnShowTransactions()" disabled=@(!boolDetailCollapsed)>
+            Transactions..</button>
+    </td>
+    <td></td>
+</tr>
+@if (!boolDetailCollapsed)
+{
+    <tr>
+        <td> Account Number:</td>
+        <td><input type="text" value=@model.AccountNumber class="form-control" readonly />
+        </td>
+        <td> Sort Code:</td>
+        <td><input type="text" value=@model.SortCode class="form-control" readonly />
+        </td>
+        <td>
+            <a class="btn btn-warning" href="/accounts/@model.Id">Edit/More..</a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5">
+            <button type="button" class="btn btn-outline-warning" @onclick="() => BtnClose()">Close</button>
+        </td>
+    </tr>
+}
+
+@if (!boolTransactionCollapsed && boolAddTransactionCollapsed)
+{
+    @if (boolLoading)
+    {
+        <Loading></Loading>
+    }
+    else
+    {
+        <tr>
+            <td colspan="5">
+                <TableTransaction model=transactions boolHideAccountButton=true></TableTransaction>
+                <button type="button" class="btn btn-outline-success" @onclick="()=>BtnAddTransaction()">
+                    Add Transaction..</button>
+                <a class="btn btn-success" href="/transactions?accountId=@model.Id">All Transactions</a>
+            </td>
+        </tr>
+        <div class="row">
+            <button type="button" class="btn btn-outline-warning btn-block" @onclick="() => BtnClose()">Close</button>
+        </div>
+    }
+}
+
+@if (!boolAddTransactionCollapsed && !boolTransactionCollapsed)
+{
+    @if (boolLoading)
+    {
+        <Loading></Loading>
+    }
+    else
+    {
+
+
+        <tr>
+            <td colspan="5">
+                <AddTransaction AccountId="model.Id" CallbackCollapse="HandlerCollapseAddTransaction"></AddTransaction>
+            </td>
+        </tr>
+    }
+}
+
+
+@code {
+
+    [Parameter]
+    public GetAccountModel model { get; set; } = new GetAccountModel();
+
+    [Parameter]
+    public EventCallback CallbackRestoreAllChildren { get; set; }
+
+    [Parameter]
+    public EventCallback<GetAccountModel> CallbackCollapseAllOtherChildren { get; set; }
+
+    private bool boolChildrenHidden = false;
+    private bool boolLoading = false;
+
+    private bool boolTransactionCollapsed = true;
+    private bool boolDetailCollapsed = true;
+
+    private bool boolAddTransactionCollapsed = true;
+
+    private List<GetTransactionModel>? transactions { get; set; } = new List<GetTransactionModel>();
+
+    protected async Task BtnClose()
+    {
+        try
+        {
+            boolDetailCollapsed = true;
+            boolTransactionCollapsed = true;
+            boolAddTransactionCollapsed = true;
+            await FlipChildren();
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+
+    }
+
+    protected async Task BtnShowDetails()
+    {
+        try
+        {
+            boolDetailCollapsed = !boolDetailCollapsed;
+            boolTransactionCollapsed = true;
+            boolAddTransactionCollapsed = true;
+            await FlipChildren();
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+
+    }
+
+
+    protected void BtnAddTransaction()
+    {
+
+        try
+        {
+            boolDetailCollapsed = true;
+            boolAddTransactionCollapsed = false;
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+    }
+
+    protected async Task BtnShowTransactions()
+    {
+        try
+        {
+            boolTransactionCollapsed = !boolTransactionCollapsed;
+            boolDetailCollapsed = true;
+            boolAddTransactionCollapsed = true;
+            await GetTransactions();
+            await FlipChildren();
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+        }
+
+
+    }
+    private async Task FlipChildren()
+    {
+        try
+        {
+            if (boolChildrenHidden)
+            {
+                await this.CallbackRestoreAllChildren.InvokeAsync();
+            }
+            else
+            {
+                await this.CallbackCollapseAllOtherChildren.InvokeAsync(this.model);
+            }
+            boolChildrenHidden = !boolChildrenHidden;
+        }
+        catch (Exception ex)
+        {
+
+        }
+        finally
+        {
+
+        }
+    }
+    private async Task GetTransactions()
+    {
+        transactions = await _transactionService.GetTransactionByAccountId(model.Id, 5);
+    }
+    private async Task HandlerCollapseAddTransaction()
+    {
+        await GetTransactions();
+        boolAddTransactionCollapsed = true;
+        this.StateHasChanged();
+    }
+
+
+
+}

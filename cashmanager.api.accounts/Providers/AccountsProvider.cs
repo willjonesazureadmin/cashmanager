@@ -116,5 +116,32 @@ namespace cashmanager.api.accounts.Providers
                 return (false, null, ex.Message);
             }
         }
+
+        public (bool IsSuccess, GetAccountModel? account, string? ErrorMessage) UpdateAccount(UpdateAccountModel model)
+        {
+            try
+            {
+                var account = dbContext.Accounts.FirstOrDefault(a => a.Id == model.Id);
+                if (account != null)
+                {
+                    account.AccountNumber = model.AccountNumber;
+                    account.FriendlyName = model.FriendlyName;
+                    account.Provider = model.Provider;
+                    account.SortCode = model.SortCode;
+                    account.AccountNumber = model.SortCode;
+                    dbContext.Update(account);
+                    dbContext.SaveChanges();
+                    var result = mapper.Map<Db.Account, Models.GetAccountModel>(account);
+
+                    return (true, result, null);
+                }
+                return (false, null, "Not Found");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
+        }
     }
 }

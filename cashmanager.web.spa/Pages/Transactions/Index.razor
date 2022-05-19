@@ -1,0 +1,44 @@
+@page "/transactions"
+@using Models
+@inject cashmanager.web.spa.Services.ITransactionService _transactionService;
+
+<AppHeader pageName="Transactions" />
+@if(Loading)
+{
+<Loading></Loading>
+}
+else
+{
+    <cashmanager.web.spa.Shared.Components.Transactions.TableTransaction model=transactions></cashmanager.web.spa.Shared.Components.Transactions.TableTransaction>
+}
+
+
+
+
+
+@code {
+
+    private List<GetTransactionModel> transactions {get; set;} = new List<GetTransactionModel>();
+    private bool Loading;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try{
+            Loading = true;
+        transactions = await _transactionService.GetAll();
+        }
+        catch(Exception ex)
+        {
+
+        }
+        finally
+        {
+            Loading = false;
+        }
+    }
+
+
+
+}
